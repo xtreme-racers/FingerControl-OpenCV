@@ -3,7 +3,7 @@ import cv2
 
 
 class FingerControl:
-    def __init__(self, x0, y0, x1, y1):
+    def __init__(self, x0, y0, x1, y1, movements):
         self.webcam = cv2.VideoCapture(0)
         # Left hand region
         self.region = None
@@ -22,6 +22,8 @@ class FingerControl:
         self.x1 = x1
         self.y0 = y0
         self.y1 = y1
+        #movement
+        self.movements = movements
 
     # Draw zone for capture player skin tone
     def initRect(self, frame):
@@ -138,13 +140,13 @@ class FingerControl:
                 far_point = (0,0)
 
             if(des[0]<0 and des[1]<0):
-                print("left")
+                print(self.movements["left"])
             elif(des[0]>=0 and des[1]<0):
-                print("up")
+                print(self.movements["up"])
             elif(des[0]>=0 and des[1]>=0):
-                print("right")
+                print(self.movements["right"])
             else:
-                print("down")
+                print(self.movements["down"])
 
             if len(self.marker) < 2:
                 self.marker.append(far_point)
