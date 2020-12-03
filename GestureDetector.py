@@ -1,9 +1,16 @@
 import numpy as np
 import cv2
+import socket
+
 
 
 class FingerControl:
     def __init__(self, x0, y0, x1, y1, movements):
+        self.UDP_IP = "127.0.0.1"
+        self.UDP_PORT = 5065
+
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
         self.webcam = cv2.VideoCapture(0)
         # Left hand region
         self.region = None
@@ -141,12 +148,19 @@ class FingerControl:
 
             if(des[0]<0 and des[1]<0):
                 print(self.movements["left"])
+                self.sock.sendto((self.movements["left"]).encode(), (self.UDP_IP, self.UDP_PORT))
+
             elif(des[0]>=0 and des[1]<0):
                 print(self.movements["up"])
+                self.sock.sendto((self.movements["up"]).encode(), (self.UDP_IP, self.UDP_PORT))
+
             elif(des[0]>=0 and des[1]>=0):
                 print(self.movements["right"])
+                self.sock.sendto((self.movements["right"]).encode(), (self.UDP_IP, self.UDP_PORT))
+
             else:
                 print(self.movements["down"])
+                self.sock.sendto((self.movements["down"]).encode(), (self.UDP_IP, self.UDP_PORT))
 
             if len(self.marker) < 2:
                 self.marker.append(far_point)
